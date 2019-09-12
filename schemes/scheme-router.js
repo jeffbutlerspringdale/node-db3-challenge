@@ -50,8 +50,8 @@ router.post('/', (req, res) => {
   const schemeData = req.body;
 
   Schemes.add(schemeData)
-  .then(scheme => {
-    res.status(201).json(scheme);
+  .then(newScheme => {
+    res.status(201).json(newScheme);
   })
   .catch (err => {
     res.status(500).json({ message: 'Failed to create new scheme' });
@@ -82,19 +82,17 @@ router.put('/:id', (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
-  Schemes.findById(id)
+  Schemes.update(id, changes)
+
   .then(scheme => {
     if (scheme) {
-      Schemes.update(changes, id)
-      .then(updatedScheme => {
-        res.json(updatedScheme);
-      });
+      res.json({ updated: scheme });
     } else {
-      res.status(404).json({ message: 'Could not find scheme with given id' });
+      res.status(404).json({ message: 'Could not find user with given id' });
     }
   })
-  .catch (err => {
-    res.status(500).json({ message: 'Failed to update scheme' });
+  .catch(err => {
+    res.status(500).json({ message: 'Failed to update user' });
   });
 });
 
